@@ -6,7 +6,7 @@ Streamlabsのダッシュボード「最近のイベント」画面で確認ボ�
 
 ## インストール
 
-1. [Release](https://github.com/ritsu2891/streamlabs-auto-donation-check/releases)ページより**extension.zip**をダウンロードします。
+1. [Release](https://github.com/ritsu2891/streamlabs-auto-donation-check/releases)ページより**build.zip**をダウンロードします。
 
 2. **extension.zip**に含まれている**build**フォルダを適当な箇所に配置します。（どこでもかまいません）
 
