@@ -4,8 +4,7 @@ My Chrome Extension
 
 ## Features
 
-- Feature 1
-- Feature 2
+- TBD
 
 ## Install
 
@@ -13,7 +12,7 @@ My Chrome Extension
 
 ## Contribution
 
-Suggestions and pull requests are welcomed!.
+Suggestions and pull requests are welcomed!
 
 ---
 
