@@ -13,9 +13,8 @@
 
 // Log `title` of current active web page
 const pageTitle = document.head.getElementsByTagName('title')[0].innerHTML;
-console.log(
-  `Page title is: '${pageTitle}' - evaluated by Chrome extension's 'contentScript.js' file`
-);
+console.log(`[rpaka SADC] 初期化処理`);
+console.log(pageTitle);
 
 // Communicate with background file by sending a message
 chrome.runtime.sendMessage(
@@ -41,3 +40,59 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   sendResponse({});
   return true;
 });
+
+var lastCount = 0;
+
+function runFn() {
+  console.log("[rpaka SADC] 走査");
+
+  var contentFrame
+  var contentDocument
+  try {
+    var contentFrame = document.getElementById("missionControl");
+    var contentDocument = contentFrame.contentWindow.document;
+  } catch (e) {
+    setTimeout(runFn, 1000);
+    return;
+  }
+
+  var donateItems = contentDocument.querySelectorAll(".event-donation");
+
+  var diffCount = donateItems.length - lastCount;
+  lastCount = donateItems.length;
+  var execCount = 0;
+
+  if (0 < diffCount) {
+    console.log(`新規検出${diffCount}件`);
+  }
+
+  for (var donateItem of donateItems) {
+    try {
+      if (diffCount < ++execCount) break;
+
+      var opBtn = donateItem.querySelector(".table__button > button");
+      var opBtnMark = opBtn.querySelector("i");
+      var opBtnIsChecked = opBtnMark.className.split(' ').includes('fa-check');
+
+      if (opBtnIsChecked) continue;
+      opBtn.click();
+      console.log("[rpaka SADC] クリック");
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  setTimeout(runFn, 1000);
+}
+
+window.addEventListener("load", function () {
+  console.log("load");
+  setTimeout(runFn, 1000);
+
+  /*
+  let mutationObserver = new MutationObserver(
+    mutations => runFn()
+  )
+  mutationObserver.observe(document.body, { childList: true })
+  */
+})
