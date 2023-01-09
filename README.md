@@ -6,9 +6,9 @@ Streamlabsのダッシュボード「最近のイベント」画面で確認ボ�
 
 ## インストール
 
-1. [Release](https://github.com/ritsu2891/streamlabs-auto-donation-check/releases)ページより**build.zip**をダウンロードします。
+1. [Release](https://github.com/ritsu2891/streamlabs-auto-donation-check/releases)ページより**extension.zip**をダウンロードします。
 
-2. **build.zip**に含まれている**build**フォルダを適当な箇所に配置します。（どこでもかまいません）
+2. **extension.zip**に含まれている**build**フォルダを適当な箇所に配置します。（どこでもかまいません）
 
 3. Google Chromeにて[chrome://extensions/](chrome://extensions/)を開き、右上の「デベロッパーモード」をクリックして有効にします。その後「パッケージ化されていない拡張機能を読み込む」をクリックします。
 
