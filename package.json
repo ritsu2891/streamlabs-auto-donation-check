@@ -1,6 +1,6 @@
 {
   "name": "streamlabs-auto-donation-check",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Streamlabsのダッシュボード「最近のイベント」画面で確認ボタンを押していないドネートについて自動的に確認ボタンを押します。",
   "private": true,
   "scripts": {
