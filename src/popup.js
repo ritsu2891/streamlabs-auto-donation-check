@@ -3,110 +3,64 @@
 import './popup.css';
 
 (function () {
-  // We will make use of Storage API to get and store `count` value
-  // More information on Storage API can we found at
-  // https://developer.chrome.com/extensions/storage
-
-  // To get storage access, we have to mention it in `permissions` property of manifest.json file
-  // More information on Permissions can we found at
-  // https://developer.chrome.com/extensions/declare_permissions
-  const counterStorage = {
+  const settingStorage = {
     get: (cb) => {
-      chrome.storage.sync.get(['count'], (result) => {
-        cb(result.count);
+      chrome.storage.sync.get(['enable'], (result) => {
+        if (result.enable === undefined) {
+          result.enable = true;
+          chrome.storage.sync.set(result, () => { });
+        }
+        cb(result);
       });
     },
     set: (value, cb) => {
       chrome.storage.sync.set(
-        {
-          count: value,
-        },
-        () => {
-          cb();
-        }
+        value,
+        cb
       );
     },
   };
 
-  function setupCounter(initialValue = 0) {
-    document.getElementById('counter').innerHTML = initialValue;
+  function setupUI(setting) {
+    document.getElementById('counter').innerHTML = setting.enable ? '有効' : '無効';
 
-    document.getElementById('incrementBtn').addEventListener('click', () => {
-      updateCounter({
-        type: 'INCREMENT',
-      });
-    });
+    var oldPowBtn = document.getElementById('powBtn');
+    var powBtn = oldPowBtn.cloneNode(true);
+    oldPowBtn.parentNode.replaceChild(powBtn, oldPowBtn);
 
-    document.getElementById('decrementBtn').addEventListener('click', () => {
-      updateCounter({
-        type: 'DECREMENT',
-      });
-    });
-  }
-
-  function updateCounter({ type }) {
-    counterStorage.get((count) => {
-      let newCount;
-
-      if (type === 'INCREMENT') {
-        newCount = count + 1;
-      } else if (type === 'DECREMENT') {
-        newCount = count - 1;
-      } else {
-        newCount = count;
+    var powBtnFn = () => {
+      console.log("button push");
+      var newSetting = {
+        enable: !setting.enable
       }
-
-      counterStorage.set(newCount, () => {
-        document.getElementById('counter').innerHTML = newCount;
-
-        // Communicate with content script of
-        // active tab by sending a message
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          const tab = tabs[0];
-
-          chrome.tabs.sendMessage(
-            tab.id,
-            {
-              type: 'COUNT',
-              payload: {
-                count: newCount,
-              },
-            },
-            (response) => {
-              console.log('Current count value passed to contentScript file');
-            }
-          );
-        });
-      });
-    });
-  }
-
-  function restoreCounter() {
-    // Restore count value
-    counterStorage.get((count) => {
-      if (typeof count === 'undefined') {
-        // Set counter value as 0
-        counterStorage.set(0, () => {
-          setupCounter(0);
-        });
-      } else {
-        setupCounter(count);
-      }
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', restoreCounter);
-
-  // Communicate with background file by sending a message
-  chrome.runtime.sendMessage(
-    {
-      type: 'GREETINGS',
-      payload: {
-        message: 'Hello, my name is Pop. I am from Popup.',
-      },
-    },
-    (response) => {
-      console.log(response.message);
+      settingStorage.set(newSetting, restore);
     }
-  );
+
+    powBtn.addEventListener('click', powBtnFn);
+    powBtn.innerHTML = setting.enable ? '無効にする' : '有効にする';
+  }
+
+  function restore() {
+    settingStorage.get((setting) => {
+      setupUI(setting);
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const tab = tabs[0];
+
+        chrome.tabs.sendMessage(
+          tab.id,
+          {
+            type: 'CHAGNE_POW',
+            payload: {
+              enable: setting.enable,
+            },
+          },
+          (response) => {
+            console.log('[ドネートチェック自動化] 設定変化通知完了');
+          }
+        );
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', restore);
 })();
