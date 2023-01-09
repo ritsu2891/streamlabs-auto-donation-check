@@ -1,12 +1,13 @@
 {
   "name": "streamlabs-auto-donation-check",
-  "version": "0.1.0",
-  "description": "My Chrome Extension",
+  "version": "1.0.0",
+  "description": "Streamlabsのダッシュボード「最近のイベント」画面で確認ボタンを押していないドネートについて自動的に確認ボタンを押します。",
   "private": true,
   "scripts": {
     "watch": "webpack --mode=development --watch --config config/webpack.config.js",
     "build": "webpack --mode=production --config config/webpack.config.js",
-    "format": "prettier --write --ignore-unknown \"{config,public,src}/**/*.{html,css,js,ts,json}\""
+    "format": "prettier --write --ignore-unknown \"{config,public,src}/**/*.{html,css,js,ts,json}\"",
+    "pack": "crx3 build -p build.pem"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^10.2.4",

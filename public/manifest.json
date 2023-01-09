@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Streamlabs Auto Donation Check",
-  "version": "0.1.0",
-  "description": "My Chrome Extension",
+  "version": "1.0.0",
+  "description": "Streamlabsのダッシュボード「最近のイベント」画面で確認ボタンを押していないドネートについて自動的に確認ボタンを押します。",
   "icons": {
     "16": "icons/icon_16.png",
     "32": "icons/icon_32.png",
